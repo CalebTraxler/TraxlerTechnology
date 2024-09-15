@@ -32,9 +32,6 @@ def add_bg_from_local(image_file):
         unsafe_allow_html=True,
     )
 
-# Uncomment the line below to add a background image
-# add_bg_from_local('assets/background.jpg')
-
 # Load the logo image
 logo = Image.open('love.png')
 
@@ -104,78 +101,6 @@ if page == "Home":
         how we plan to establish a sustainable human presence on Mars.
         """
     )
-
-# Mars Data Explorer
-elif page == "Mars Data Explorer":
-    st.markdown("<h1 class='main-header'>Mars Data Explorer</h1>", unsafe_allow_html=True)
-
-    st.write(
-        """
-        Dive into detailed visualizations of Mars' terrain, climate, and more.
-        Use the tools below to explore the Red Planet like never before.
-        """
-    )
-
-    # Placeholder for Mars terrain data visualization
-    st.subheader("Mars Surface Elevation Map")
-
-    # Sample elevation data (replace with real Mars data later)
-    elevation_data = np.random.rand(50, 50)
-
-    fig = go.Figure(data=[go.Surface(z=elevation_data)])
-    fig.update_layout(
-        title='Mars Surface Elevation',
-        autosize=False,
-        width=800,
-        height=800,
-        margin=dict(l=65, r=50, b=65, t=90),
-    )
-
-    st.plotly_chart(fig)
-
-# Colonization Simulations
-elif page == "Colonization Simulations":
-    st.markdown("<h1 class='main-header'>Colonization Simulations</h1>", unsafe_allow_html=True)
-
-    st.write(
-        """
-        Simulate various aspects of Mars colonization, including habitat design,
-        resource management, and population growth.
-        """
-    )
-
-    st.subheader("Mars Colony Habitat Designer")
-
-    # User inputs for simulation
-    module_size = st.selectbox("Select Module Size", ["Small", "Medium", "Large"])
-    energy_source = st.radio("Choose Energy Source", ["Solar", "Nuclear", "Wind"])
-    include_life_support = st.checkbox("Include Life Support Systems", True)
-
-    # Simulated calculations (you can enhance these later)
-    if module_size == "Small":
-        base_area = 50
-    elif module_size == "Medium":
-        base_area = 100
-    else:
-        base_area = 200
-
-    energy_multiplier = 1.0
-    if energy_source == "Solar":
-        energy_multiplier = 1.0
-    elif energy_source == "Nuclear":
-        energy_multiplier = 1.5
-    else:
-        energy_multiplier = 1.2
-
-    energy_requirements = base_area * energy_multiplier
-
-    st.write(f"Estimated Habitat Base Area: {base_area} square meters")
-    st.write(f"Estimated Energy Requirements: {energy_requirements} kWh/day")
-
-    if include_life_support:
-        st.write("Life Support Systems: Included")
-    else:
-        st.write("Life Support Systems: Not Included")
 
 # About Us
 elif page == "About Us":
