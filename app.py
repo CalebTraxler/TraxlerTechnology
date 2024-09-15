@@ -15,22 +15,22 @@ st.set_page_config(
 # Load the logo image
 logo = Image.open('love.png')
 
-# Sidebar configuration
-st.sidebar.image(logo, use_column_width=True)
-st.sidebar.title("Navigation")
-
-page = st.sidebar.radio(
-    "Go to",
-    ["Home", "About Us"],
-)
-
-# Custom CSS for white background and black text
+# Custom CSS for white background and black text, including sidebar and top bar
 st.markdown(
     """
     <style>
-    body, html, .css-1v3fvcr, .stApp, .sidebar .sidebar-content, .css-18e3th9 {
+    body, html, .css-1v3fvcr, .stApp, .sidebar .sidebar-content, .css-18e3th9,
+    .css-1d391kg, .css-1e5imcs, .css-1vbkxwb {
         background-color: #ffffff !important;
         color: #000000 !important;
+    }
+
+    .sidebar .sidebar-content, [data-testid="stSidebar"] {
+        background-color: #ffffff !important;
+    }
+
+    header[data-testid="stHeader"] {
+        background-color: #ffffff !important;
     }
 
     @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
@@ -68,16 +68,36 @@ st.markdown(
         color: #000000;
     }
 
-    .sidebar .sidebar-content {
-        background-color: #ffffff;
-    }
-
     .css-145kmo2 {
         color: #000000;
+    }
+
+    /* Ensure sidebar text is black */
+    .sidebar .sidebar-content {
+        color: #000000 !important;
+    }
+
+    /* Style the radio buttons in the sidebar */
+    .stRadio > label {
+        color: #000000 !important;
+    }
+
+    /* Ensure the top bar hamburger menu is black */
+    .css-1rs6os {
+        color: #000000 !important;
     }
     </style>
     """,
     unsafe_allow_html=True,
+)
+
+# Sidebar configuration
+st.sidebar.image(logo, use_column_width=True)
+st.sidebar.title("Navigation")
+
+page = st.sidebar.radio(
+    "Go to",
+    ["Home", "About Us"],
 )
 
 # Home Page
