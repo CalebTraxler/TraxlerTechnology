@@ -15,7 +15,7 @@ st.set_page_config(
 # Load the logo image
 logo = Image.open('love.png')
 
-# Custom CSS for white background and black text, including sidebar
+# Custom CSS for white background and black text, including sidebar and top bar
 st.markdown(
     """
     <style>
@@ -30,17 +30,17 @@ st.markdown(
     .sidebar .sidebar-content, [data-testid="stSidebar"] {
         background-color: #ffffff !important;
     }
-    .sidebar .sidebar-content {
-        color: #000000 !important;
-    }
-    /* Ensure all text in sidebar is black */
-    [data-testid="stSidebar"] * {
+    .sidebar .sidebar-content, [data-testid="stSidebar"] * {
         color: #000000 !important;
     }
 
     /* Top bar styles */
     header[data-testid="stHeader"] {
         background-color: #ffffff !important;
+    }
+    /* Ensure all text in top bar is black */
+    [data-testid="stHeader"] * {
+        color: #000000 !important;
     }
 
     /* Font import */
@@ -89,12 +89,14 @@ st.markdown(
         color: #000000 !important;
     }
 
-    /* Additional sidebar text color fix */
-    .css-17lntkn {
+    /* Additional sidebar and top bar text color fix */
+    .css-17lntkn, .css-pkbazv, .css-14xtw13, .css-163ttbj, .css-1aehpvj {
         color: #000000 !important;
     }
-    .css-pkbazv {
-        color: #000000 !important;
+
+    /* Fix for any SVG icons */
+    svg {
+        fill: #000000 !important;
     }
     </style>
     """,
