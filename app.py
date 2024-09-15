@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 from PIL import Image
 import base64
-import plotly.graph_objects as go
+
 
 # Set page configuration with theme settings
 st.set_page_config(
