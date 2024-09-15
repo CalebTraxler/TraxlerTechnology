@@ -15,75 +15,85 @@ st.set_page_config(
 # Load the logo image
 logo = Image.open('love.png')
 
-# Custom CSS for white background and black text, including sidebar and top bar
+# Custom CSS for white background and black text, including sidebar
 st.markdown(
     """
     <style>
-    body, html, .css-1v3fvcr, .stApp, .sidebar .sidebar-content, .css-18e3th9,
+    /* Global styles */
+    body, html, .css-1v3fvcr, .stApp, .css-18e3th9,
     .css-1d391kg, .css-1e5imcs, .css-1vbkxwb {
         background-color: #ffffff !important;
         color: #000000 !important;
     }
 
+    /* Sidebar styles */
     .sidebar .sidebar-content, [data-testid="stSidebar"] {
         background-color: #ffffff !important;
     }
+    .sidebar .sidebar-content {
+        color: #000000 !important;
+    }
+    /* Ensure all text in sidebar is black */
+    [data-testid="stSidebar"] * {
+        color: #000000 !important;
+    }
 
+    /* Top bar styles */
     header[data-testid="stHeader"] {
         background-color: #ffffff !important;
     }
 
+    /* Font import */
     @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
     html, body, [class*="css"]  {
         font-family: 'Roboto', sans-serif;
     }
 
+    /* Header styles */
     .main-header {
         text-align: center;
         padding: 20px 0 10px 0;
         color: #000000;
     }
-
     .sub-header {
         text-align: center;
         color: #333333;
         padding: 0 0 20px 0;
     }
 
+    /* Button styles */
     .stButton>button {
         color: #000000;
         border-color: #000000;
     }
 
-    .stTextInput>div>div>input {
-        color: #000000;
-    }
-
+    /* Input styles */
+    .stTextInput>div>div>input,
     .stSelectbox>div>div>select {
         color: #000000;
     }
 
+    /* Checkbox styles */
     .stCheckbox>label>div {
         color: #000000;
     }
 
-    .css-145kmo2 {
-        color: #000000;
-    }
-
-    /* Ensure sidebar text is black */
-    .sidebar .sidebar-content {
-        color: #000000 !important;
-    }
-
-    /* Style the radio buttons in the sidebar */
+    /* Radio button styles */
     .stRadio > label {
         color: #000000 !important;
     }
 
-    /* Ensure the top bar hamburger menu is black */
+    /* Top bar hamburger menu */
     .css-1rs6os {
+        color: #000000 !important;
+    }
+
+    /* Additional sidebar text color fix */
+    .css-17lntkn {
+        color: #000000 !important;
+    }
+    .css-pkbazv {
         color: #000000 !important;
     }
     </style>
