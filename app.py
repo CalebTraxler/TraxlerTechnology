@@ -148,7 +148,7 @@ elif page == "About Us":
             """
             **Our Mission**
 
-            At Traxler Technology, our mission is to advance humanity's reach into the cosmos by pioneering
+            At Traxler Technology, our mission is to advance humanity's reach into the cosmos by exploring
             innovative solutions for Mars exploration and colonization. We believe in a future where humans
             live and thrive on multiple planets.
 
