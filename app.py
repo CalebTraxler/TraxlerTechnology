@@ -5,32 +5,12 @@ import numpy as np
 from PIL import Image
 import base64
 
-
 # Set page configuration with theme settings
 st.set_page_config(
     page_title="Traxler Technology - Mars Colonization",
     layout="wide",
     initial_sidebar_state="auto"
 )
-
-# Function to add background image
-def add_bg_from_local(image_file):
-    with open(image_file, "rb") as image_file:
-        encoded_string = base64.b64encode(image_file.read())
-    st.markdown(
-        f"""
-        <style>
-        .stApp {{
-            background-image: url(data:image/{"png"};base64,{encoded_string.decode()});
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-        }}
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
 
 # Load the logo image
 logo = Image.open('love.png')
@@ -44,13 +24,13 @@ page = st.sidebar.radio(
     ["Home", "About Us"],
 )
 
-# Custom CSS for base theme (light) and text colors
+# Custom CSS for white background and black text
 st.markdown(
     """
     <style>
-    body, html, .css-1v3fvcr, .stApp {
-        background-color: #ffffff;  /* Secondary background color */
-        color: #000000;  /* Text color */
+    body, html, .css-1v3fvcr, .stApp, .sidebar .sidebar-content, .css-18e3th9 {
+        background-color: #ffffff !important;
+        color: #000000 !important;
     }
 
     @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
@@ -62,17 +42,37 @@ st.markdown(
     .main-header {
         text-align: center;
         padding: 20px 0 10px 0;
-        color: #000000;  /* Custom text color */
+        color: #000000;
     }
 
     .sub-header {
         text-align: center;
-        color: #555;
+        color: #333333;
         padding: 0 0 20px 0;
+    }
+
+    .stButton>button {
+        color: #000000;
+        border-color: #000000;
+    }
+
+    .stTextInput>div>div>input {
+        color: #000000;
+    }
+
+    .stSelectbox>div>div>select {
+        color: #000000;
+    }
+
+    .stCheckbox>label>div {
+        color: #000000;
     }
 
     .sidebar .sidebar-content {
         background-color: #ffffff;
+    }
+
+    .css-145kmo2 {
         color: #000000;
     }
     </style>
@@ -140,7 +140,6 @@ elif page == "About Us":
             **Follow Us**
 
             - [LinkedIn](https://www.linkedin.com/company/traxlertech)
-
             """
         )
 
