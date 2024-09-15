@@ -44,7 +44,7 @@ st.sidebar.title("Navigation")
 
 page = st.sidebar.radio(
     "Go to",
-    ["Home", "Mars Data Explorer", "Colonization Simulations", "About Us"],
+    ["Home", "About Us"],
 )
 
 # Custom CSS for base theme (light) and text colors
