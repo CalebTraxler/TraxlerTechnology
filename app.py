@@ -1,16 +1,16 @@
 # C:\Users\caleb
-
-
 import streamlit as st
 import pandas as pd
 import numpy as np
 from PIL import Image
 import base64
+import plotly.graph_objects as go
 
-# Set page configuration
+# Set page configuration with theme settings
 st.set_page_config(
     page_title="Traxler Technology - Mars Colonization",
     layout="wide",
+    initial_sidebar_state="auto"
 )
 
 # Function to add background image
@@ -19,16 +19,16 @@ def add_bg_from_local(image_file):
         encoded_string = base64.b64encode(image_file.read())
     st.markdown(
         f"""
-    <style>
-    .stApp {{
-        background-image: url(data:image/{"png"};base64,{encoded_string.decode()});
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-    }}
-    </style>
-    """,
+        <style>
+        .stApp {{
+            background-image: url(data:image/{"png"};base64,{encoded_string.decode()});
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }}
+        </style>
+        """,
         unsafe_allow_html=True,
     )
 
@@ -41,20 +41,21 @@ logo = Image.open('love.png')
 # Sidebar configuration
 st.sidebar.image(logo, use_column_width=True)
 st.sidebar.title("Navigation")
-#page = st.sidebar.radio(
-    #"Go to",
-    #["Home", "Mars Data Explorer", "Colonization Simulations", "About Us"],
-#)
 
 page = st.sidebar.radio(
     "Go to",
-    ["Home", "About Us"],
+    ["Home", "Mars Data Explorer", "Colonization Simulations", "About Us"],
 )
 
-# Custom CSS for fonts and headings
+# Custom CSS for base theme (light) and text colors
 st.markdown(
     """
     <style>
+    body, html, .css-1v3fvcr, .stApp {
+        background-color: #ffffff;  /* Secondary background color */
+        color: #000000;  /* Text color */
+    }
+
     @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
     html, body, [class*="css"]  {
@@ -64,12 +65,18 @@ st.markdown(
     .main-header {
         text-align: center;
         padding: 20px 0 10px 0;
+        color: #000000;  /* Custom text color */
     }
 
     .sub-header {
         text-align: center;
         color: #555;
         padding: 0 0 20px 0;
+    }
+
+    .sidebar .sidebar-content {
+        background-color: #ffffff;
+        color: #000000;
     }
     </style>
     """,
