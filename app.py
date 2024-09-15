@@ -157,7 +157,7 @@ elif page == "About Us":
             Caleb Traxler, Founder & CEO of Traxler Technology is a visionary entrepreneur with a passion for space exploration and technology. 
             Caleb has an comprehensive academic background in Machine Learning and Artificial Intelligence, he founded Traxler Technology to bring the dream of 
             Mars colonization closer to reality. Caleb and his team will help bring the notion of humanity being 
-            a space-faring civilization to reality. At Traxler Technology, we will determine what Mars has to offer to humanity by analyzing the martian landscape, mineral compositions, elevation levels and much more. 
+            a space-faring civilization to reality. At Traxler Technology, we are determined to explore what Mars has to offer to humanity by analyzing the martian landscape, mineral compositions, elevation levels and much more. 
 
             **Our Team**
 
