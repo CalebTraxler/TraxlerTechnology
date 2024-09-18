@@ -1,4 +1,23 @@
 # C:\Users\caleb
+
+import subprocess
+import sys
+
+def install(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
+packages = ['plotly', 'folium']
+
+print("Starting installation of packages...")
+for package in packages:
+    try:
+        print(f"Installing {package}...")
+        install(package)
+        print(f"{package} installed successfully.")
+    except subprocess.CalledProcessError:
+        print(f"Failed to install {package}. Please check your internet connection and try again.")
+
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -6,6 +25,8 @@ from PIL import Image
 import base64
 import plotly.graph_objects as go
 import folium
+
+
 
 # Set page configuration with theme settings
 st.set_page_config(
