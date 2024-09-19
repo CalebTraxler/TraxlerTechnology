@@ -6,7 +6,7 @@ import sys
 def install(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
-packages = ['plotly', 'folium']
+packages ='folium'
 
 print("Starting installation of packages...")
 for package in packages:
