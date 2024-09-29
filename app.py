@@ -9,6 +9,7 @@ import folium
 import plotly.express as px
 from datetime import datetime
 import os
+from streamlit.runtime.scriptrunner import add_script_run_ctx
 
 # Set page configuration with theme settings
 st.set_page_config(
@@ -175,9 +176,11 @@ def add_idea(title, description):
     st.session_state.mars_ideas = pd.concat([st.session_state.mars_ideas, new_idea], ignore_index=True)
     save_ideas(st.session_state.mars_ideas)
 
+# Update the vote_idea function
 def vote_idea(index):
     st.session_state.mars_ideas.loc[index, 'votes'] += 1
     save_ideas(st.session_state.mars_ideas)
+    st.session_state.voted = True  # Add this line
 
 # Function to create Mars map
 def create_mars_map():
@@ -377,6 +380,7 @@ elif page == "Mars Innovators Hub":
             if idea_title and idea_description:
                 add_idea(idea_title, idea_description)
                 st.success("Your idea has been submitted successfully!")
+                st.session_state.idea_submitted = True  # Add this line
             else:
                 st.error("Please provide both a title and description for your idea.")
 
@@ -423,9 +427,14 @@ elif page == "Mars Innovators Hub":
             with col2:
                 if st.button(f"👍 Upvote ({idea['votes']})", key=f"vote_{index}"):
                     vote_idea(index)
-                    st.experimental_rerun()
+                    st.session_state.voted = True  # Add this line
     else:
         st.info("No ideas submitted yet. Be the first to share your innovative Mars exploration idea!")
+
+    # Add this block at the end of the Mars Innovators Hub section
+    if st.session_state.get('voted', False) or st.session_state.get('idea_submitted', False):
+        add_script_run_ctx()
+        st.rerun()
 
 # About Us
 elif page == "About Us":
