@@ -367,11 +367,6 @@ elif page == "Mars Minerals":
         """,
         unsafe_allow_html=True
     )
-    
-    st.markdown("<h3 class='section-header'>Join Our Mars Mineral Research Team</h3>", unsafe_allow_html=True)
-    st.write("Are you passionate about Martian geology and resource utilization? Join our team!")
-    if st.button("Apply Now"):
-        st.success("Thank you for your interest! We'll be in touch soon with more information about joining our Mars mineral research team.")
 
 
 # Mars Innovators Hub page
