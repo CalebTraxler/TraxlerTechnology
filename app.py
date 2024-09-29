@@ -151,20 +151,24 @@ page = st.sidebar.radio(
 # File to store ideas
 IDEAS_FILE = 'mars_ideas.csv'
 
-# Function to load ideas from CSV
-def load_ideas():
-    if os.path.exists(IDEAS_FILE):
-        return pd.read_csv(IDEAS_FILE, parse_dates=['timestamp'])
-    return pd.DataFrame(columns=['title', 'description', 'votes', 'timestamp'])
-
-# Function to save ideas to CSV
+# Add this function to save the ideas with replies
 def save_ideas(ideas_df):
-    ideas_df.to_csv(IDEAS_FILE, index=False)
+    ideas_df.to_csv("mars_ideas.csv", index=False)
 
-# Initialize session state to store ideas if it doesn't exist
+# Add this function to load the ideas with replies
+def load_ideas():
+    try:
+        ideas_df = pd.read_csv("mars_ideas.csv")
+        ideas_df['timestamp'] = pd.to_datetime(ideas_df['timestamp'])
+        ideas_df['replies'] = ideas_df['replies'].apply(eval)  # Convert string representation of list back to list
+        return ideas_df
+    except FileNotFoundError:
+        return pd.DataFrame(columns=['title', 'description', 'votes', 'timestamp', 'replies'])
+
+# Initialize the ideas DataFrame in session state
 if 'mars_ideas' not in st.session_state:
     st.session_state.mars_ideas = load_ideas()
-
+    
 def add_idea(title, description):
     new_idea = pd.DataFrame({
         'title': [title],
@@ -371,9 +375,7 @@ elif page == "Mars Minerals":
 elif page == "Mars Innovators Hub":
     st.markdown("<h1 class='main-header'>Mars Innovators Hub</h1>", unsafe_allow_html=True)
     st.markdown("<h2 class='sub-header'>Share Your Ideas for Mars Exploration and Colonization</h2>", unsafe_allow_html=True)
-
     col1, col2 = st.columns(2)
-
     with col1:
         st.markdown("<h3 class='section-header'>Submit Your Idea</h3>", unsafe_allow_html=True)
         idea_title = st.text_input("Idea Title")
@@ -384,14 +386,14 @@ elif page == "Mars Innovators Hub":
                     'title': [idea_title],
                     'description': [idea_description],
                     'votes': [0],
-                    'timestamp': [datetime.now()]
+                    'timestamp': [datetime.now()],
+                    'replies': [[]]  # Add this line to include an empty list for replies
                 })
                 st.session_state.mars_ideas = pd.concat([st.session_state.mars_ideas, new_idea], ignore_index=True)
                 save_ideas(st.session_state.mars_ideas)
                 st.success("Your idea has been submitted successfully!")
             else:
                 st.error("Please provide both a title and description for your idea.")
-
     with col2:
         st.markdown("<h3 class='section-header'>Need Inspiration?</h3>", unsafe_allow_html=True)
         st.markdown(
@@ -414,7 +416,6 @@ elif page == "Mars Innovators Hub":
             """,
             unsafe_allow_html=True
         )
-
     st.markdown("<h3 class='section-header'>Explore Ideas</h3>", unsafe_allow_html=True)
     if not st.session_state.mars_ideas.empty:
         # Sort ideas by votes (descending) and then by timestamp (descending)
@@ -437,6 +438,24 @@ elif page == "Mars Innovators Hub":
                 if st.button(f"👍 Upvote ({idea['votes']})", key=f"vote_{index}"):
                     vote_idea(index)
                     st.experimental_rerun()
+            
+            # Add reply section
+            st.markdown("<h5>Replies</h5>", unsafe_allow_html=True)
+            for reply in idea['replies']:
+                st.markdown(f"<div class='reply-card'>{reply}</div>", unsafe_allow_html=True)
+            
+            # Add reply input and submit button
+            reply_text = st.text_area("Add a reply", key=f"reply_input_{index}")
+            if st.button("Submit Reply", key=f"reply_submit_{index}"):
+                if reply_text:
+                    st.session_state.mars_ideas.at[index, 'replies'].append(reply_text)
+                    save_ideas(st.session_state.mars_ideas)
+                    st.success("Your reply has been added successfully!")
+                    st.experimental_rerun()
+                else:
+                    st.error("Please enter a reply before submitting.")
+            
+            st.markdown("<hr>", unsafe_allow_html=True)
     else:
         st.info("No ideas submitted yet. Be the first to share your innovative Mars exploration idea!")
 
