@@ -390,7 +390,7 @@ elif page == "Mars Innovators Hub":
                     'description': [idea_description],
                     'votes': [0],
                     'timestamp': [datetime.now()],
-                    'replies': [[]]  # Add this line to include an empty list for replies
+                    'replies': [[]]
                 })
                 st.session_state.mars_ideas = pd.concat([st.session_state.mars_ideas, new_idea], ignore_index=True)
                 save_ideas(st.session_state.mars_ideas)
@@ -438,28 +438,40 @@ elif page == "Mars Innovators Hub":
                     unsafe_allow_html=True
                 )
             with col2:
-                if st.button(f"👍 Upvote ({idea['votes']})", key=f"vote_{index}"):
-                    vote_idea(index)
-                    st.experimental_rerun()
+                vote_count = st.empty()
+                vote_count.write(f"👍 Upvotes: {idea['votes']}")
+                if st.button(f"Upvote", key=f"vote_{index}"):
+                    st.session_state.mars_ideas.at[index, 'votes'] += 1
+                    save_ideas(st.session_state.mars_ideas)
+                    vote_count.write(f"👍 Upvotes: {st.session_state.mars_ideas.at[index, 'votes']}")
             
             # Add reply section
             st.markdown("<h5>Replies</h5>", unsafe_allow_html=True)
+            replies_container = st.empty()
+            
             if 'replies' in idea and isinstance(idea['replies'], list):
-                for reply in idea['replies']:
-                    st.markdown(f"<div class='reply-card'>{reply}</div>", unsafe_allow_html=True)
+                replies = idea['replies']
             else:
-                st.session_state.mars_ideas.at[index, 'replies'] = []
+                replies = []
+                st.session_state.mars_ideas.at[index, 'replies'] = replies
+
+            def display_replies():
+                replies_html = ""
+                for reply in replies:
+                    replies_html += f"<div class='reply-card'>{reply}</div>"
+                replies_container.markdown(replies_html, unsafe_allow_html=True)
+
+            display_replies()
             
             # Add reply input and submit button
-            reply_text = st.text_area("Add a reply", key=f"reply_input_{index}")
+            reply_text = st.text_input("Add a reply", key=f"reply_input_{index}")
             if st.button("Submit Reply", key=f"reply_submit_{index}"):
                 if reply_text:
-                    if 'replies' not in st.session_state.mars_ideas.columns:
-                        st.session_state.mars_ideas['replies'] = [[]] * len(st.session_state.mars_ideas)
-                    st.session_state.mars_ideas.at[index, 'replies'].append(reply_text)
+                    replies.append(reply_text)
+                    st.session_state.mars_ideas.at[index, 'replies'] = replies
                     save_ideas(st.session_state.mars_ideas)
+                    display_replies()
                     st.success("Your reply has been added successfully!")
-                    st.experimental_rerun()
                 else:
                     st.error("Please enter a reply before submitting.")
             
