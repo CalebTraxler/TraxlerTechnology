@@ -252,9 +252,8 @@ if page == "Home":
             <div class='card'>
             <h3>Latest News</h3>
             <ul>
-                <li>Traxler Tech secures major funding for Mars mineral mapping project</li>
+                <li>Traxler Technology accelerates further research for Mars mineral mapping project</li>
                 <li>New breakthrough in Martian soil analysis techniques</li>
-                <li>Collaboration announced with NASA for future Mars missions</li>
             </ul>
             </div>
             """,
