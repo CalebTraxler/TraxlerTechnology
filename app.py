@@ -160,7 +160,10 @@ def load_ideas():
     try:
         ideas_df = pd.read_csv("mars_ideas.csv")
         ideas_df['timestamp'] = pd.to_datetime(ideas_df['timestamp'])
-        ideas_df['replies'] = ideas_df['replies'].apply(eval)  # Convert string representation of list back to list
+        if 'replies' in ideas_df.columns:
+            ideas_df['replies'] = ideas_df['replies'].apply(lambda x: eval(x) if isinstance(x, str) else [])
+        else:
+            ideas_df['replies'] = [[]] * len(ideas_df)
         return ideas_df
     except FileNotFoundError:
         return pd.DataFrame(columns=['title', 'description', 'votes', 'timestamp', 'replies'])
@@ -441,13 +444,18 @@ elif page == "Mars Innovators Hub":
             
             # Add reply section
             st.markdown("<h5>Replies</h5>", unsafe_allow_html=True)
-            for reply in idea['replies']:
-                st.markdown(f"<div class='reply-card'>{reply}</div>", unsafe_allow_html=True)
+            if 'replies' in idea and isinstance(idea['replies'], list):
+                for reply in idea['replies']:
+                    st.markdown(f"<div class='reply-card'>{reply}</div>", unsafe_allow_html=True)
+            else:
+                st.session_state.mars_ideas.at[index, 'replies'] = []
             
             # Add reply input and submit button
             reply_text = st.text_area("Add a reply", key=f"reply_input_{index}")
             if st.button("Submit Reply", key=f"reply_submit_{index}"):
                 if reply_text:
+                    if 'replies' not in st.session_state.mars_ideas.columns:
+                        st.session_state.mars_ideas['replies'] = [[]] * len(st.session_state.mars_ideas)
                     st.session_state.mars_ideas.at[index, 'replies'].append(reply_text)
                     save_ideas(st.session_state.mars_ideas)
                     st.success("Your reply has been added successfully!")
