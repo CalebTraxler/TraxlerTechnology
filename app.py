@@ -9,7 +9,6 @@ import folium
 import plotly.express as px
 from datetime import datetime
 import os
-from streamlit.runtime.scriptrunner import add_script_run_ctx
 
 # Set page configuration with theme settings
 st.set_page_config(
@@ -180,7 +179,10 @@ def add_idea(title, description):
 def vote_idea(index):
     st.session_state.mars_ideas.loc[index, 'votes'] += 1
     save_ideas(st.session_state.mars_ideas)
-    st.session_state.voted = True  # Add this line
+
+# Initialize session state for mars_ideas if it doesn't exist
+if 'mars_ideas' not in st.session_state:
+    st.session_state.mars_ideas = load_ideas()
 
 # Function to create Mars map
 def create_mars_map():
@@ -378,9 +380,15 @@ elif page == "Mars Innovators Hub":
         idea_description = st.text_area("Describe your idea")
         if st.button("Submit Idea"):
             if idea_title and idea_description:
-                add_idea(idea_title, idea_description)
+                new_idea = pd.DataFrame({
+                    'title': [idea_title],
+                    'description': [idea_description],
+                    'votes': [0],
+                    'timestamp': [datetime.now()]
+                })
+                st.session_state.mars_ideas = pd.concat([st.session_state.mars_ideas, new_idea], ignore_index=True)
+                save_ideas(st.session_state.mars_ideas)
                 st.success("Your idea has been submitted successfully!")
-                st.session_state.idea_submitted = True  # Add this line
             else:
                 st.error("Please provide both a title and description for your idea.")
 
@@ -413,28 +421,24 @@ elif page == "Mars Innovators Hub":
         sorted_ideas = st.session_state.mars_ideas.sort_values(['votes', 'timestamp'], ascending=[False, False])
         
         for index, idea in sorted_ideas.iterrows():
-            st.markdown(
-                f"""
-                <div class='idea-card'>
-                <h4>{idea['title']}</h4>
-                <p>{idea['description']}</p>
-                <p><small>Submitted on: {idea['timestamp'].strftime('%Y-%m-%d %H:%M:%S')}</small></p>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
             col1, col2 = st.columns([3, 1])
+            with col1:
+                st.markdown(
+                    f"""
+                    <div class='idea-card'>
+                    <h4>{idea['title']}</h4>
+                    <p>{idea['description']}</p>
+                    <p><small>Submitted on: {idea['timestamp'].strftime('%Y-%m-%d %H:%M:%S')}</small></p>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
             with col2:
                 if st.button(f"👍 Upvote ({idea['votes']})", key=f"vote_{index}"):
                     vote_idea(index)
-                    st.session_state.voted = True  # Add this line
+                    st.experimental_rerun()
     else:
         st.info("No ideas submitted yet. Be the first to share your innovative Mars exploration idea!")
-
-    # Add this block at the end of the Mars Innovators Hub section
-    if st.session_state.get('voted', False) or st.session_state.get('idea_submitted', False):
-        add_script_run_ctx()
-        st.rerun()
 
 # About Us
 elif page == "About Us":
