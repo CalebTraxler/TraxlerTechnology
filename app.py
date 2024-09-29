@@ -145,7 +145,7 @@ st.sidebar.title("Navigation")
 
 page = st.sidebar.radio(
     "Go to",
-    ["Home", "Mars Minerals", "Mars Innovators Hub", "Mars Data Explorer", "About Us"],
+    ["Home", "Mars Minerals", "Mars Innovators Hub", "About Us"],
 )
 
 # File to store ideas
@@ -427,71 +427,6 @@ elif page == "Mars Innovators Hub":
                     st.experimental_rerun()
     else:
         st.info("No ideas submitted yet. Be the first to share your innovative Mars exploration idea!")
-
-# Mars Data Explorer page
-elif page == "Mars Data Explorer":
-    st.markdown("<h1 class='main-header'>Mars Data Explorer</h1>", unsafe_allow_html=True)
-    st.markdown("<h2 class='sub-header'>Analyze and Visualize Mars Data</h2>", unsafe_allow_html=True)
-
-    # Simulated Mars data
-    @st.cache_data
-    def load_mars_data():
-        dates = pd.date_range(start='2023-01-01', end='2023-12-31', freq='D')
-        temperature = np.random.normal(-63, 15, size=len(dates))  # Average temperature on Mars is about -63°C
-        pressure = np.random.normal(600, 50, size=len(dates))  # Average pressure on Mars is about 600 Pascals
-        wind_speed = np.random.normal(10, 5, size=len(dates))  # Wind speeds on Mars can vary
-        
-        df = pd.DataFrame({
-            'Date': dates,
-            'Temperature (°C)': temperature,
-            'Pressure (Pa)': pressure,
-            'Wind Speed (m/s)': wind_speed
-        })
-        return df
-
-    mars_data = load_mars_data()
-
-    st.markdown("<h3 class='section-header'>Mars Weather Data</h3>", unsafe_allow_html=True)
-    
-    # Date range selection
-    col1, col2 = st.columns(2)
-    with col1:
-        start_date = st.date_input("Start Date", min(mars_data['Date']), min_value=min(mars_data['Date']), max_value=max(mars_data['Date']))
-    with col2:
-        end_date = st.date_input("End Date", max(mars_data['Date']), min_value=min(mars_data['Date']), max_value=max(mars_data['Date']))
-
-    filtered_data = mars_data[(mars_data['Date'] >= pd.Timestamp(start_date)) & (mars_data['Date'] <= pd.Timestamp(end_date))]
-
-    # Data visualization
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(x=filtered_data['Date'], y=filtered_data['Temperature (°C)'], name='Temperature'))
-    fig.add_trace(go.Scatter(x=filtered_data['Date'], y=filtered_data['Pressure (Pa)'], name='Pressure', yaxis='y2'))
-    fig.add_trace(go.Scatter(x=filtered_data['Date'], y=filtered_data['Wind Speed (m/s)'], name='Wind Speed', yaxis='y3'))
-
-    fig.update_layout(
-        title='Mars Weather Data',
-        yaxis=dict(title='Temperature (°C)'),
-        yaxis2=dict(title='Pressure (Pa)', overlaying='y', side='right'),
-        yaxis3=dict(title='Wind Speed (m/s)', overlaying='y', side='right'),
-        legend=dict(x=1.1, y=1),
-        height=600
-    )
-
-    st.plotly_chart(fig, use_container_width=True)
-
-    # Data statistics
-    st.markdown("<h3 class='section-header'>Data Statistics</h3>", unsafe_allow_html=True)
-    st.dataframe(filtered_data.describe())
-
-    # Download data option
-    st.markdown("<h3 class='section-header'>Download Data</h3>", unsafe_allow_html=True)
-    csv = filtered_data.to_csv(index=False)
-    st.download_button(
-        label="Download Mars Data as CSV",
-        data=csv,
-        file_name="mars_weather_data.csv",
-        mime="text/csv",
-    )
 
 # About Us
 elif page == "About Us":
